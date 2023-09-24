@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="./thezuraiz.png" type="image/x-icon">
+        <title>Cafe Try</title>
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+        <link href='https://fonts.googleapis.com/css?family=Zen Dots'
+            rel='stylesheet'>
+        <style>
+        .rows {
+            display: flex;
+            gap: 10px;
+        }
+
+        #todisable {
+            display: none;
+        }
+
+        .ma
+        {
+            margin: 0px 5px;
+        }
+        body
+        {
+            font-family: 'Zen Dots';font-size: 18px;
+        }
+
+        @media print {
+            .dn {
+                display: none;
+            }
+
+            hr {
+                height: 10px;
+            }
+
+            .actionButtons {
+                display: none;
+            }
+        }
+        </style>
+
+    </head>
+
+    <body>
+        <div class="container  d-flex justify-content-center mt-3">
+            <h1>Welcome To Chaa House</h1>
+        </div>
+        <div class="container rows">
+            <div class="container w-25 dn">
+                <form class="m-3 display">
+
+                    <div class="form-group">
+                        <label for="items">
+                        <h6>Choose From This List:</h6>
+                    </label>
+
+                        <select id='items' class="form-control">
+                            <option value>Select Coffee</option>
+                            <option value="Simple Tea">Simple Tea</option>
+                            <option value="Instant Coffee">Instant Coffee</option>
+                            <option value="Laty">Laty</option>
+                            <option value="Cappuccino">Cappuccino</option>
+                            <option value="Americano">Americano</option>
+                            <option value="Espresso">Espresso</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="formGroupExampleInput2">
+                            <h6>Cost:</h6>
+                        </label>
+                        <input type="number" class="form-control" id="cost"
+                            disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput3">
+                            <h6>Quality:</h6>
+                        </label>
+                        <input type="number" class="form-control"
+                            id="itemQuantity" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput3">
+                            <h6>Amount:</h6>
+                        </label>
+                        <input type="number" class="form-control" id="amount"
+                            disabled>
+                    </div>
+                    <div class="row d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary"
+                            id="addButton">ADD</button><button type="button"
+                            class="btn btn-success ma" id='print'>Print</button><button
+                            type="button" class="btn btn-warning"
+                            id='clear'>Clear</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="container  w-75 my-3">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Items</th>
+                            <th>Cost</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data">
+
+                    </tbody>
+                </table>
+                <hr>
+                <table class="table table-bordered my-2" id="todisable">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Amount:</th>
+                            <th id="finalAmount"></th>
+                        </tr>
+                        <tr>
+                            <th scope="row">10% Discount:</th>
+                            <th id="discountedAmount"></th>
+                        </tr>
+                        <tr>
+                            <th scope="row">17% GST:</th>
+                            <th id="gst"></th>
+                        </tr>
+                        <tr>
+                            <th scope="row">Total Amount:</th>
+                            <th id="TotalAmount"></th>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </body>
+    <script>
+
+var add = () => {
+            if( item.value == ''){
+                alert("Please Select Item");
+                return;
+            }
+            if( itemQuantity.value <= 0){
+                alert("Please Select Item Quantity");
+                return;
+            }
+           
+            var flag= false
+            Array.from(document.querySelectorAll('.productName')).forEach((productName,index)=>{
+               let product_Name = productName.innerText;
+               let product_Cost = productName.parentElement.children[2].innerText;
+               let product_Quantity = productName.parentElement.children[3].innerText;
+
+               if(item.value == product_Name){
+                    console.log("Match Found: " + product_Name)
+                    let reassignValue = Number.parseInt(product_Quantity) + Number.parseInt(itemQuantity.value)
+                    productName.parentElement.children[3].innerText=reassignValue
+
+                    
+                    productPrice =  document.querySelector('#rowPrice')
+                    product_Quantity = productName.parentElement.children[3].innerText;
+                    console.log(product_Quantity,'price')
+                    productPrice.innerText = Number.parseInt(product_Cost) *  Number.parseInt(product_Quantity);
+                    flag=true
+                }
+            })
+
+            if(!flag){
+            document.querySelector('#data').innerHTML += "<tr><td class='productName'>" + item.value + "</td><td class='tc'>" + cost.value + "</td><td class='tq'>" + itemQuantity.value + "</td><td id='rowPrice'>"+ Amount +"</td><td><button type='button' class='btn btn-danger actionButtons rowDelete'>Delete</button></td></tr>";
+
+            document.querySelectorAll('.rowDelete').forEach((e)=>{
+                e.addEventListener('click',deleteRow)
+            })
+
+        }
+        document.querySelector('#todisable').style.display = 'table';
+        updateTotalAmount();
+        
+        item.value = "";
+        cost.value = 0;
+        itemQuantity.value = 0;
+        amount.value = 0;
+        
+    }
+    function printTable() {
+        window.print();
+    }
+    function refresh(){
+        location.reload();
+    }
+    let calculate = (totalAmount)=>{
+        let discount = (totalAmount * 10) /100;
+        let discountedAmount = totalAmount - discount;
+        let gst = (discountedAmount * 17) /100;
+        let finalAmount = discountedAmount +  gst; 
+
+        document.querySelector('#discountedAmount').innerText = discountedAmount;
+        document.querySelector('#gst').innerText = gst;
+        document.querySelector('#TotalAmount').innerText = Math.round(finalAmount);;
+    }
+    var updateTotalAmount = () =>{
+        let totalAmount = 0;
+        document.querySelectorAll('#rowPrice').forEach((e)=>{
+            totalAmount += Number.parseInt(e.innerText);    
+        })
+        calculate(totalAmount)
+
+        document.querySelector('#finalAmount').innerText = totalAmount;
+
+        if(totalAmount == 0){
+            document.querySelector('#todisable').style.display = 'none';
+        }
+    }
+    
+    var deleteRow = (e)=>{
+        let row = e.target.parentElement.parentElement;
+        console.log(row);
+        row.remove() ;
+        updateTotalAmount();
+    }
+
+        
+        let i = 1;
+        let totalAmount=0;
+        let item = document.querySelector("#items");
+        let cost = document.querySelector("#cost");
+        var Amount = 0;
+        item.addEventListener('change', () => {
+            itemQuantity = document.querySelector('#itemQuantity')
+                if (item.value == "Simple Tea") {
+                    cost.value = "100";
+                }
+                else if (item.value == "Instant Coffee") {
+                    cost.value = '200';
+                }
+                else if (item.value == "Laty") {
+                    cost.value = "300";
+                }
+                else if (item.value == "Cappuccino") {
+                    cost.value = "400";
+                }
+                else if (item.value == "Americano") {
+                    cost.value = "500";
+                }
+                else if (item.value == "Espresso") {
+                    cost.value = "600";
+                }
+                else
+                {
+                    return;
+                }
+            });   
+            
+            itemQuantity.addEventListener('change',()=>{
+                if(cost.value<0)return;
+                let itemQuantity = document.querySelector('#itemQuantity');
+                itemQuantity = Number.parseInt(itemQuantity.value);
+                console.log(itemQuantity,typeof(itemQuantity));
+                Amount = itemQuantity*cost.value;
+                document.querySelector('#amount').value = Amount;
+            })
+
+            document.querySelector('#addButton').addEventListener('click',add);
+            document.querySelector('#clear').addEventListener('click',refresh)
+            document.querySelector('#print').addEventListener('click',printTable)
+    </script>
+</html>
